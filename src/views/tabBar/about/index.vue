@@ -1,25 +1,14 @@
 <!-- about -->
 <template>
-  <!-- <router-link to="/rem">Rem</router-link> | -->
-  <!-- <router-link to="/scssConfig">scssConfig</router-link> -->
   <div class="about_container">
-    <div class="item avatar">
-      <van-image width="100" height="100" round src="https://img01.yzcdn.cn/vant/cat.jpeg" />
-    </div>
-    <div class="item author">项目作者：{{ userInfo.author }}</div>
+    <div class="item author"></div>
     <div class="item author">
-      <p class="label">微信授权code码:</p>
-      <p>{{ code }}</p>
-    </div>
-    <div class="item url" @click="jumpUrl">
-      <p class="label">项目地址:</p>
-      <p>{{ userInfo.projectAddress }}</p>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue'
-import { fetchUserInfo } from '@/api/authController.ts'
+import { fetchUserInfo } from '@/api/authController'
 import { useStore } from 'vuex'
 import * as Types from '@/store/modules/Auth/types'
 import { IGlobalState } from '@/store'

@@ -38,15 +38,15 @@ export const constantRouterMap: Array<RouteRecordRaw> = [
     meta: { title: 'Rem', keepAlive: false, showTab: true }
   },
   {
-    path: '/scssConfig',
-    name: 'ScssConfig',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/ScssConfig.vue'),
-    meta: { title: 'ScssConfig', keepAlive: false, showTab: true }
-  },
-  {
     path: '/storage',
     name: 'Storage',
     component: () => import(/* webpackChunkName: "about" */ '@/views/Storage/index.vue'),
     meta: { title: 'Storage使用', keepAlive: false, showTab: true }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '@/views/login/login.vue'),
+    meta: { title: '登陆', keepAlive: false, showTab: true }
   }
 ]

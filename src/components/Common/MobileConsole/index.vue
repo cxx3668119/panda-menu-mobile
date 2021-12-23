@@ -1,7 +1,6 @@
 <!-- MobileConsole -->
 <template>
   <teleport to="#vconsole">
-    <div class="vc-tigger" @click="toggleVc">点我</div>
   </teleport>
 </template>
 <script lang="ts">
