@@ -30,7 +30,7 @@
           :rules="[{ required: true, message: '请填写密码' }]"
         />
         <div style="margin: 16px;">
-          <van-button round block type="info" native-type="submit">{{
+          <van-button round block type="info" >{{
             titlList[tabbarCurrent]
           }}</van-button>
         </div>
@@ -39,7 +39,7 @@
 
     <!-- 注册内容 -->
     <div class="signin-container" v-if="tabbarCurrent === 1">
-            <van-form @submit="onSubmit" class="login-content">
+      <van-form @submit="onSubmit" class="login-content">
         <van-field
           v-model="username"
           name="用户名"
@@ -55,22 +55,29 @@
           placeholder="邮箱"
           :rules="[{ required: true, message: '请填写邮箱' }]"
         />
-          <van-field
+        <van-field
           v-model="password"
+          type="password"
           name="密码"
           label="密码"
           placeholder="密码"
           :rules="[{ required: true, message: '请填写密码' }]"
         />
-        <van-field
-          v-model="authcode"
-          type="authcode"
-          name="邮箱验证码"
-          label="邮箱验证码"
-          placeholder="邮箱验证码"
-          :rules="[{ required: true, message: '请填写验证码' }]"
-        />
-         <van-button style="margin-top:10px" round block type="info" native-type="submit">加入大熊猫</van-button>
+        <van-row>
+          <van-col span="18">
+            <van-field
+              v-model="authcode"
+              name="邮箱验证码"
+              label="邮箱验证码"
+              placeholder="邮箱验证码"
+              :rules="[{ required: true, message: '请填写验证码' }]"
+          /></van-col>
+          <van-col span="6" class="center"><van-button round plain type="info" class="signin-verify">获取验证</van-button></van-col>
+        </van-row>
+
+        <van-button style="margin-top:10px" round block type="info" native-type="submit" @click="sign"
+          >加入大熊猫</van-button
+        >
       </van-form>
     </div>
   </div>
@@ -78,7 +85,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, toRefs, ref } from 'vue'
-import { Toast } from 'vant';
+import { Toast } from 'vant'
 export default defineComponent({
   name: 'Home',
   setup() {
@@ -88,10 +95,10 @@ export default defineComponent({
       tabbarCurrent: 0,
       value1: '',
       value2: '',
-      username:'',
-      password:'',
-      mail:'',
-      authcode:'',
+      username: '',
+      password: '',
+      mail: '',
+      authcode: '',
       pattern: /\d{6}/
     })
 
@@ -105,11 +112,11 @@ export default defineComponent({
       },
 
       // 校验函数返回 true 表示校验通过，false 表示不通过
-      validator: (val:string) => {
+      validator: (val: string) => {
         return /1\d{10}/.test(val)
       },
       // 异步校验函数返回 Promise
-      asyncValidator(val:string) {
+      asyncValidator(val: string) {
         return new Promise((resolve) => {
           Toast.loading('验证中...')
 
@@ -119,8 +126,14 @@ export default defineComponent({
           }, 1000)
         })
       },
-      onFailed(errorInfo:string) {
+      onFailed(errorInfo: string) {
         console.log('failed', errorInfo)
+      },
+
+      // 注册
+      sign(){
+       console.log( methods.validator(state.username));
+       
       }
     })
     return {
@@ -154,6 +167,13 @@ export default defineComponent({
     .icon-right {
       margin-top: 8px;
       font-size: 14px;
+    }
+  }
+
+  .signin-container{
+    .signin-verify{
+      width: 90px;
+      height: 30px;
     }
   }
 }
