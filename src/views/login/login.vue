@@ -164,14 +164,25 @@ export default defineComponent({
 
       async verify() {
         if (methods.validatorB(state.mail, mailpattern)) {
+          const TIME_COUNT = 60;
           // 拿验证 倒计时
           state.btnStatus = true
-          state.codeStatus = !state.codeStatus
           const query = { mail: state.mail }
           const res = await sendMail(query)
           if (res.code === 200) {
-            
-            
+            state.codeNum = TIME_COUNT
+            state.codeStatus = !state.codeStatus
+            const codeTime = setInterval(
+              ()=>{
+                if (state.codeNum > 0 && state.codeNum <=TIME_COUNT) {
+                  state.codeNum--;
+                } else{
+                  clearInterval(codeTime)
+                  state.btnStatus = false
+                  this.codeTime = null
+                }
+              }
+            ,1000)
           }else{
             Toast.fail('发送失败')
           }
