@@ -21,18 +21,18 @@ module.exports = {
       //  当出现编译器错误或警告时，在浏览器中显示全屏覆盖层
       warnings: false,
       errors: true
+    },
+    // 配置跨域
+    proxy: {
+      '/api': {
+          target: "http://vquex2.natappfree.cc/",
+          // ws: true, // 是否启用websockets
+          changOrigin:true, // 开启代理，在本地创建一个虚拟服务端
+          pathRewrite:{
+              '^/api':'/'
+          }
+      }
     }
-    //配置跨域
-    // proxy: {
-    //   '/api': {
-    //       target: "https://test.xxx.com",
-    //       // ws: true, // 是否启用websockets
-    //       changOrigin:true, // 开启代理，在本地创建一个虚拟服务端
-    //       pathRewrite:{
-    //           '^/api':'/'
-    //       }
-    //   }
-    // }
   },
   css: {
     loaderOptions: {

@@ -20,3 +20,4 @@ export interface IJsSdk {
   timestamp: string
   appId: string
 }
+

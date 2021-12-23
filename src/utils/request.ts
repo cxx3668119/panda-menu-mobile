@@ -10,7 +10,7 @@ import router from '@/router'
 import { config } from '@/config'
 
 const service = axios.create({
-  baseURL: config.baseApi + '/vue-h5', // url = base url + request url
+  baseURL: config.baseApi, // url = base url + request url
   timeout: 5000,
   withCredentials: false // send cookies when cross-domain requests
   // headers: {
@@ -49,6 +49,9 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code !== 0) {
       // token 过期
+      if (res.code === 200) {
+        return res
+      }
       if (res.code === 401) {
         // 警告提示窗
         return

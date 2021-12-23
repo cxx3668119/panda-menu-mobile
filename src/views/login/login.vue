@@ -29,17 +29,15 @@
           placeholder="密码"
           :rules="[{ required: true, message: '请填写密码' }]"
         />
-        <div style="margin: 16px;">
-          <van-button round block type="info" >{{
-            titlList[tabbarCurrent]
-          }}</van-button>
+        <div style="margin: 16px">
+          <van-button round block type="info">{{ titlList[tabbarCurrent] }}</van-button>
         </div>
       </van-form>
     </div>
 
     <!-- 注册内容 -->
     <div class="signin-container" v-if="tabbarCurrent === 1">
-      <van-form @submit="onSubmit" class="login-content">
+      <van-form class="login-content">
         <van-field
           v-model="username"
           name="用户名"
@@ -53,7 +51,7 @@
           name="邮箱"
           label="邮箱"
           placeholder="邮箱"
-          :rules="[{ required: true, message: '请填写邮箱' }]"
+          :rules="[{ validator, message: '请填写正确的邮箱' }]"
         />
         <van-field
           v-model="password"
@@ -61,8 +59,9 @@
           name="密码"
           label="密码"
           placeholder="密码"
-          :rules="[{ required: true, message: '请填写密码' }]"
+          :rules="[{ pattern, message: '请填写八位以上密码，包含数字和字母' }]"
         />
+        <!--  :rules="[{ validator, message: '请填写六位以上密码' }]" -->
         <van-row>
           <van-col span="18">
             <van-field
@@ -72,10 +71,28 @@
               placeholder="邮箱验证码"
               :rules="[{ required: true, message: '请填写验证码' }]"
           /></van-col>
-          <van-col span="6" class="center"><van-button round plain type="info" class="signin-verify">获取验证</van-button></van-col>
+          <van-col span="6" class="center"
+            ><van-button
+              round
+              plain
+              :disabled="btnStatus"
+              type="info"
+              class="signin-verify"
+              @click="verify"
+              ><text v-if="codeStatus">获取验证</text>
+              <text v-else>{{codeNum}}</text>
+              </van-button
+            ></van-col
+          >
         </van-row>
 
-        <van-button style="margin-top:10px" round block type="info" native-type="submit" @click="sign"
+        <van-button
+          style="margin-top: 10px"
+          round
+          block
+          type="info"
+          native-type="submit"
+          @click="sign"
           >加入大熊猫</van-button
         >
       </van-form>
@@ -86,10 +103,16 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs, ref } from 'vue'
 import { Toast } from 'vant'
+import { throttle } from '../../utils/index'
+import { checkUsername, sendMail } from '@/api/authController'
 export default defineComponent({
   name: 'Home',
   setup() {
     const titlList = ['登录', '注册']
+    const mailpattern = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+    const passwordpattern = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,15}$/
+    const usernamepattern = /^[a-zA-Z0-9_-]{4,16}$/
+    const pat = /^[0-9]{4}$/
 
     const state = reactive({
       tabbarCurrent: 0,
@@ -99,7 +122,10 @@ export default defineComponent({
       password: '',
       mail: '',
       authcode: '',
-      pattern: /\d{6}/
+      codeStatus:true,
+      codeNum:60,
+      btnStatus: false,
+      pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,15}$/
     })
 
     const methods = reactive({
@@ -112,9 +138,15 @@ export default defineComponent({
       },
 
       // 校验函数返回 true 表示校验通过，false 表示不通过
+      // 邮箱
       validator: (val: string) => {
-        return /1\d{10}/.test(val)
+        return /^\w+@[a-zA-Z0-9]+((\.[a-z0-9A-Z]{1,})+)$/.test(val)
       },
+
+      validatorB: (val: string, reg: RegExp) => {
+        return reg.test(val)
+      },
+
       // 异步校验函数返回 Promise
       asyncValidator(val: string) {
         return new Promise((resolve) => {
@@ -130,16 +162,51 @@ export default defineComponent({
         console.log('failed', errorInfo)
       },
 
-      // 注册
-      sign(){
-       console.log( methods.validator(state.username));
-       
+      async verify() {
+        if (methods.validatorB(state.mail, mailpattern)) {
+          // 拿验证 倒计时
+          state.btnStatus = true
+          state.codeStatus = !state.codeStatus
+          const query = { mail: state.mail }
+          const res = await sendMail(query)
+          if (res.code === 200) {
+            
+            
+          }else{
+            Toast.fail('发送失败')
+          }
+          console.log(res)
+        } else {
+          Toast.fail('请输入正确的邮箱')
+        }
       }
     })
+    const sign = throttle(async () => {
+      if (
+        methods.validatorB(state.username, usernamepattern) &&
+        methods.validatorB(state.password, passwordpattern) &&
+        methods.validatorB(state.mail, mailpattern) &&
+        methods.validatorB(state.authcode, pat)
+      ) {
+        // 发送请求
+        const query = { username: state.username }
+        const result = await checkUsername(query)
+        console.log(result)
+      } else if (!methods.validatorB(state.authcode, pat)) {
+        Toast.fail('验证码错误')
+      } else {
+        Toast.fail('您的个人信息有误')
+      }
+    }, 1000)
+
     return {
       titlList,
+      usernamepattern,
+      passwordpattern,
+      mailpattern,
       ...toRefs(state),
-      ...toRefs(methods)
+      ...toRefs(methods),
+      sign
     }
   }
 })
@@ -170,8 +237,8 @@ export default defineComponent({
     }
   }
 
-  .signin-container{
-    .signin-verify{
+  .signin-container {
+    .signin-verify {
       width: 90px;
       height: 30px;
     }
