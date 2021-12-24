@@ -20,6 +20,6 @@ export default defineComponent({
 .home-container {
   width: 100%;
   height: 385px;
-  background: url('../../../src/assets/images/bg.pic.jpg') no-repeat center 100% / 100%;
+  background: url('#{$url}c9ca54486d6e7db525acc7c571c8032.jpg') no-repeat center 100% / 100%;
 }
 </style>

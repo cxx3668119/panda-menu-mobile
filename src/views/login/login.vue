@@ -287,10 +287,11 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+
 .login {
   width: 100%;
   height: 695px;
-  background: url('../../../src/assets/images/login-bg.jpg') no-repeat center 100% / 100%;
+  background: url('#{$url}login-bg.jpg') no-repeat center 100% / 100%;
   opacity: 0.4;
 
   .login-header {
