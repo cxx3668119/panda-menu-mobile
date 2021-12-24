@@ -32,12 +32,6 @@ export const constantRouterMap: Array<RouteRecordRaw> = [
 		// ]
   },
   {
-    path: '/rem',
-    name: 'Rem',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/Rem.vue'),
-    meta: { title: 'Rem', keepAlive: false, showTab: true }
-  },
-  {
     path: '/storage',
     name: 'Storage',
     component: () => import(/* webpackChunkName: "about" */ '@/views/Storage/index.vue'),
