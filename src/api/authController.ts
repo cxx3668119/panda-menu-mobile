@@ -27,6 +27,50 @@ import { IResponseType, IUserInfo } from './interface'
     loading: true,
   })
 }
+
+/**
+ * 登录
+ * @returns 
+ */
+
+ export const loginU = (data:any) => {
+  return request<any>({
+    url: '/user/login',
+    method: 'post',
+    data,
+    loading: true,
+  })
+}
+
+
+/**
+ * 邮箱登录
+ * @returns 
+ */
+
+ export const loginByMail = (data:any) => {
+  return request<any>({
+    url: '/user/loginByMail',
+    method: 'post',
+    data,
+    loading: true,
+  })
+}
+
+/**
+ * 注册
+ * @returns 
+ */
+
+ export const register = (data:any) => {
+  return request<any>({
+    url: '/user/register',
+    method: 'post',
+    data,
+    loading: true,
+  })
+}
+
 /**
  * 获取用户信息
  */

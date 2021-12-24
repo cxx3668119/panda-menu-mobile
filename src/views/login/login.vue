@@ -30,7 +30,9 @@
           :rules="[{ required: true, message: '请填写密码' }]"
         />
         <div style="margin: 16px">
-          <van-button round block type="info">{{ titlList[tabbarCurrent] }}</van-button>
+          <van-button round block type="info" @click="login">{{
+            titlList[tabbarCurrent]
+          }}</van-button>
         </div>
       </van-form>
     </div>
@@ -80,9 +82,8 @@
               class="signin-verify"
               @click="verify"
               ><text v-if="codeStatus">获取验证</text>
-              <text v-else>{{codeNum}}</text>
-              </van-button
-            ></van-col
+              <text v-else>{{ codeNum }}</text>
+            </van-button></van-col
           >
         </van-row>
 
@@ -104,9 +105,10 @@
 import { defineComponent, reactive, toRefs, ref } from 'vue'
 import { Toast } from 'vant'
 import { throttle } from '../../utils/index'
-import { checkUsername, sendMail } from '@/api/authController'
+import { useRouter } from 'vue-router'
+import { checkUsername, sendMail, register, loginU, loginByMail } from '@/api/authController'
 export default defineComponent({
-  name: 'Home',
+  name: 'login',
   setup() {
     const titlList = ['登录', '注册']
     const mailpattern = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
@@ -122,9 +124,10 @@ export default defineComponent({
       password: '',
       mail: '',
       authcode: '',
-      codeStatus:true,
-      codeNum:60,
+      codeStatus: true,
+      codeNum: 60,
       btnStatus: false,
+      router:useRouter(),
       pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,15}$/
     })
 
@@ -164,34 +167,79 @@ export default defineComponent({
 
       async verify() {
         if (methods.validatorB(state.mail, mailpattern)) {
-          const TIME_COUNT = 60;
-          // 拿验证 倒计时
-          state.btnStatus = true
+          const TIME_COUNT = 60
           const query = { mail: state.mail }
           const res = await sendMail(query)
           if (res.code === 200) {
+            // 拿验证 倒计时
+            state.btnStatus = true
             state.codeNum = TIME_COUNT
             state.codeStatus = !state.codeStatus
-            const codeTime = setInterval(
-              ()=>{
-                if (state.codeNum > 0 && state.codeNum <=TIME_COUNT) {
-                  state.codeNum--;
-                } else{
-                  clearInterval(codeTime)
-                  state.btnStatus = false
-                  this.codeTime = null
-                }
+            const codeTime = setInterval(() => {
+              if (state.codeNum > 0 && state.codeNum <= TIME_COUNT) {
+                state.codeNum--
+              } else {
+                clearInterval(codeTime)
+                state.btnStatus = false
+                // this.codeTime = null
+                state.codeStatus = !state.codeStatus
               }
-            ,1000)
-          }else{
+            }, 1000)
+          } else {
             Toast.fail('发送失败')
           }
           console.log(res)
         } else {
           Toast.fail('请输入正确的邮箱')
         }
+      },
+
+      // 注册成功 登陆成功 跳到主页 存储用户信息
+      goIndex() {
+        console.log(state.router.push('/home'));
+        
       }
     })
+
+    const login = throttle(async () => {
+      console.log(methods.validatorB(state.value1, mailpattern))
+      console.log(methods.validatorB(state.value2, passwordpattern))
+
+      if (
+        (methods.validatorB(state.value1, usernamepattern) ||
+          methods.validatorB(state.value1, mailpattern)) &&
+        methods.validatorB(state.value2, passwordpattern)
+      ) {
+        if (methods.validatorB(state.value1, mailpattern)) {
+          const query = {
+            mail: state.value1,
+            password: state.value2
+          }
+          const result = loginByMail(query)
+          result.then((res) => {
+            if (res.msg === '登录成功' && res.code === 200) {
+              //登陆成功 存token
+              methods.goIndex()
+            }
+          })
+        } else {
+          const data = {
+            username: state.value1,
+            password: state.value2
+          }
+          const result = loginU(data)
+          result.then((res) => {
+            if (res.msg === '登录成功' && res.code === 200) {
+              //登陆成功 存token
+              methods.goIndex()
+            }
+          })
+        }
+      } else {
+        Toast.fail('信息错误')
+      }
+    }, 1500)
+
     const sign = throttle(async () => {
       if (
         methods.validatorB(state.username, usernamepattern) &&
@@ -202,6 +250,20 @@ export default defineComponent({
         // 发送请求
         const query = { username: state.username }
         const result = await checkUsername(query)
+        if (result.msg == '用户名可用' && result.code === 200) {
+          const data = {
+            authcode: state.authcode,
+            mail: state.mail,
+            password: state.password,
+            username: state.username
+          }
+          const res = await register(data)
+          console.log(res)
+          Toast.success(res.msg)
+          if (res.code === 200) {
+            methods.goIndex()
+          }
+        }
         console.log(result)
       } else if (!methods.validatorB(state.authcode, pat)) {
         Toast.fail('验证码错误')
@@ -217,7 +279,8 @@ export default defineComponent({
       mailpattern,
       ...toRefs(state),
       ...toRefs(methods),
-      sign
+      sign,
+      login
     }
   }
 })
