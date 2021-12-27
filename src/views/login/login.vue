@@ -104,9 +104,9 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs, ref } from 'vue'
 import { Toast } from 'vant'
-import { throttle } from '../../utils/index'
+import { throttle } from '@/utils/index'
 import { useRouter } from 'vue-router'
-import {storage} from '@/utils/storage'
+import { storage } from '@/utils/storage'
 import { checkUsername, sendMail, register, loginU, loginByMail } from '@/api/authController'
 export default defineComponent({
   name: 'login',
@@ -196,11 +196,11 @@ export default defineComponent({
       },
 
       // 注册成功 登陆成功 跳到主页 存储用户信息
-      goIndex(data: string,username:string) {
+      goIndex(data: string, username: string) {
         state.router.push('/home')
         const userInfo = {
-          'username': username,
-          'token': data
+          username: username,
+          token: data
         }
         storage.set('userInfo', userInfo)
       }
@@ -224,7 +224,7 @@ export default defineComponent({
           result.then((res) => {
             if (res.msg === '登录成功' && res.code === 200) {
               //登陆成功 存token
-              methods.goIndex(res.satoken,query.mail)
+              methods.goIndex(res.satoken, query.mail)
             }
           })
         } else {
@@ -237,7 +237,7 @@ export default defineComponent({
             .then((res) => {
               if (res.msg === '登录成功' && res.code === 200) {
                 //登陆成功 存token
-                methods.goIndex(res.satoken,data.username)
+                methods.goIndex(res.satoken, data.username)
               }
             })
             .catch((rej) => {
@@ -279,14 +279,16 @@ export default defineComponent({
                 password: state.password
               }
               const login = loginU(data)
-              login.then(res=>{
-                 if (res.msg === '登录成功' && res.code === 200) {
-                //登陆成功 存token
-                methods.goIndex(res.satoken,data.username)
-                 }
-              }).catch((rej) => {
-              Toast.fail(rej)
-            })
+              login
+                .then((res) => {
+                  if (res.msg === '登录成功' && res.code === 200) {
+                    //登陆成功 存token
+                    methods.goIndex(res.satoken, data.username)
+                  }
+                })
+                .catch((rej) => {
+                  Toast.fail(rej)
+                })
             }, 1500)
           }
         }

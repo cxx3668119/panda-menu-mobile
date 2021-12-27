@@ -2574,10 +2574,10 @@
     "lodash.memoize" "^4.1.2"
     "lodash.uniq" "^4.5.0"
 
-"caniuse-lite@^1.0.0", "caniuse-lite@^1.0.30001109", "caniuse-lite@^1.0.30001181":
-  "integrity" "sha1-VwaUJjH4O6paAhi336bO0p+EVDg= sha512-w7/EP1JRZ9552CyrThUnay2RkZ1DXxKe/Q2swTC4+LElLh9RRYrL1Z+27LlakB8kzY0fSmHw9mc7XYDUKAKWMA=="
-  "resolved" "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30001187.tgz?cache=0&sync_timestamp=1613158838441&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcaniuse-lite%2Fdownload%2Fcaniuse-lite-1.0.30001187.tgz"
-  "version" "1.0.30001187"
+"caniuse-lite@^1.0.0", "caniuse-lite@^1.0.30001109", "caniuse-lite@^1.0.30001181", "caniuse-lite@^1.0.30001292":
+  "integrity" "sha512-jnT4Tq0Q4ma+6nncYQVe7d73kmDmE9C3OGTx3MvW7lBM/eY1S1DZTMBON7dqV481RhNiS5OxD7k9JQvmDOTirw=="
+  "resolved" "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001292.tgz"
+  "version" "1.0.30001292"
 
 "case-sensitive-paths-webpack-plugin@^2.3.0":
   "integrity" "sha1-I6xhPMmoVuT4j/i7c7u16YmCXPc= sha512-/4YgnZS8y1UXXmC02xD5rRrBEu6T5ub+mQHLNRj0fzTRbgdBYhsNo2V5EqwgqrExjxsjtF/OpAKAMkKsxbD5XQ=="
