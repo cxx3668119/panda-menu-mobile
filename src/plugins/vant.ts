@@ -8,12 +8,13 @@ import {
   Col,
   Row,
   TabbarItem,
+  NavBar,
   Form,
   Field,
   Image as VanImage
 } from 'vant'
 
-const plugins = [Button, Icon, Cell, CellGroup, Tabbar, Col, Row, TabbarItem, Form, Field, VanImage]
+const plugins = [Button, Icon, NavBar,Cell, CellGroup, Tabbar, Col, Row, TabbarItem, Form, Field, VanImage]
 
 export const vantPlugins = {
   install: function(vm: VM) {
