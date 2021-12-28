@@ -25,7 +25,7 @@ module.exports = {
     // 配置跨域
     proxy: {
       '/api': {
-          target: "http://ua9587.natappfree.cc/",
+          target: "http://t9j67f.natappfree.cc/",
           // ws: true, // 是否启用websockets
           changOrigin:true, // 开启代理，在本地创建一个虚拟服务端
           pathRewrite:{

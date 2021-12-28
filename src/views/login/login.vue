@@ -42,36 +42,20 @@
       <van-form class="login-content">
         <van-field
           v-model="username"
-          name="用户名"
-          label="用户名"
-          placeholder="用户名"
-          :rules="[{ required: true, message: '请填写用户名' }]"
+          name="账号"
+          label="账号"
+          placeholder="账号"
+          :rules="[{ required: true, message: '请填写账号' }]"
         />
-        <van-field
-          v-model="mail"
-          type="mail"
-          name="邮箱"
-          label="邮箱"
-          placeholder="邮箱"
-          :rules="[{ validator, message: '请填写正确的邮箱' }]"
-        />
-        <van-field
-          v-model="password"
-          type="password"
-          name="密码"
-          label="密码"
-          placeholder="密码"
-          :rules="[{ pattern, message: '请填写八位以上密码，包含数字和字母' }]"
-        />
-        <!--  :rules="[{ validator, message: '请填写六位以上密码' }]" -->
         <van-row>
           <van-col span="18">
             <van-field
-              v-model="authcode"
-              name="邮箱验证码"
-              label="邮箱验证码"
-              placeholder="邮箱验证码"
-              :rules="[{ required: true, message: '请填写验证码' }]"
+              v-model="mail"
+              type="mail"
+              name="邮箱"
+              label="邮箱"
+              placeholder="邮箱"
+              :rules="[{ validator, message: '请填写正确的邮箱' }]"
           /></van-col>
           <van-col span="6" class="center"
             ><van-button
@@ -86,7 +70,22 @@
             </van-button></van-col
           >
         </van-row>
-
+        <van-field
+          v-model="password"
+          type="password"
+          name="密码"
+          label="密码"
+          placeholder="密码"
+          :rules="[{ pattern, message: '请填写八位以上密码，包含数字和字母' }]"
+        />
+        <!--  :rules="[{ validator, message: '请填写六位以上密码' }]" -->
+        <van-field
+          v-model="authcode"
+          name="邮箱验证码"
+          label="邮箱验证码"
+          placeholder="邮箱验证码"
+          :rules="[{ required: true, message: '请填写验证码' }]"
+        />
         <van-button
           style="margin-top: 10px"
           round
@@ -233,6 +232,8 @@ export default defineComponent({
             password: state.value2
           }
           const result = loginU(data)
+          console.log(result);
+          
           result
             .then((res) => {
               if (res.msg === '登录成功' && res.code === 200) {

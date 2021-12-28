@@ -1,7 +1,7 @@
 <template>
-  <div class="home">
-    <div class="home-container">欢迎来到首页，正在开发中</div>
-    <div class="home-footer">
+  <div class="user">
+    user:shabi
+    <div class="user-footer">
       <!-- 这里@change默认绑定在了van-tabbar上，参考vue的$attr -->
       <TabBar :tabbars="tabbars" @change="handleChange" />
     </div>
@@ -10,20 +10,18 @@
 
 <script lang="ts">
 import { computed, defineComponent, reactive, toRefs } from 'vue'
-import { Toast } from 'vant'
-import { throttle } from '@/utils/index'
-// import { useRoute } from 'vue-router'
 import TabBar, { ITabList } from '@/components/TabBar.vue'
+
 interface HomeState {
   tabbars: Array<ITabList>
   // defaultActive: number
 }
-// const route = useRoute()
+
 export default defineComponent({
   components: {
     TabBar
   },
-  name: 'Home',
+  name: 'User',
   setup() {
     const state: HomeState = reactive({
       tabbars: [
@@ -31,11 +29,6 @@ export default defineComponent({
         // { title: '案例', to: { name: 'Dome' }, icon: 'star-o' },
         { title: '我的', to: '/User', icon: 'user-circle-o', index: 1 }
       ]
-      // defaultActive: computed(() => {
-      //   return state.tabbars.findIndex((item: ITabList) => {
-      //     return item.to.name === route.name
-      //   })
-      // })
     })
 
     const handleChange = (v: number) => {
@@ -50,17 +43,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="scss">
-.icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}
-.home-container {
-  width: 100%;
-  height: 385px;
-  background: url('#{$url}c9ca54486d6e7db525acc7c571c8032.jpg') no-repeat center 100% / 100%;
-}
-</style>
+<style scoped></style>
