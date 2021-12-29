@@ -1,4 +1,4 @@
-<template>
+<template >
   <!-- <div id="app"> -->
   <!-- <router-link to="/">Home</router-link> | <router-link to="/about">About</router-link> | <router-link to="/rem">Rem</router-link> |
 		<router-link to="/scssConfig">scssConfig</router-link> -->
@@ -19,4 +19,5 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+</style>

@@ -3,8 +3,21 @@
     <div class="user-heade">
       <Navbar :title="title" />
     </div>
-    <div class="user-containe">
-      这是测试
+    <div class="user-container">
+      <div class="user-container-header"></div>
+
+      <van-image class="head-img" round width="70px" height="70px" :src="imgSrc" />
+      <div class="user-container-info"></div>
+
+      <van-cell-group class="user-container-cell" inset>
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+        <van-cell title="单元格" value="内容" />
+      </van-cell-group>
       <van-button type="primary" @click="goLogin">去登录</van-button>
     </div>
     <div class="user-footer">
@@ -15,11 +28,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from 'vue'
+import { computed, defineComponent, reactive, toRefs, onMounted, ref } from 'vue'
 import { Toast } from 'vant'
 import { throttle } from '@/utils/index'
-import { useRoute,useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Navbar, { NavList } from '@/components/Navbar.vue'
+import store from '@/store'
 import TabBar, { ITabList } from '@/components/TabBar.vue'
 interface HomeState {
   tabbars: Array<ITabList>
@@ -34,6 +48,14 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
+    // const userInit = () => {
+    //   onMounted(() => {
+    //     const userInfoList = store.getters.user
+    //     console.log(userInfoList.headimg)
+    //   })
+    // }
+
+    let imgSrc  = 'https://img.yzcdn.cn/vant/cat.jpeg'
     const state: HomeState = reactive({
       tabbars: [
         { title: '首页', to: { name: 'Home' }, icon: 'home-o' },
@@ -46,7 +68,14 @@ export default defineComponent({
         })
       })
     })
+    // const userInit = () => (data.userInfoList = ref(store.getters.user))
+    // // console.log(userInfoList)
 
+    onMounted(() => {
+      // userInit()
+      imgSrc = store.getters.user.headimg
+      console.log(imgSrc)
+    })
     const title = '我的'
 
     const handleChange = (v: number) => {
@@ -63,23 +92,57 @@ export default defineComponent({
       ...toRefs(state),
       ...toRefs(methods),
       handleChange,
-      title
+      title,
+      imgSrc,
+      // userInit,
     }
   }
 })
 </script>
 
 <style scoped lang="scss">
-.icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}
-.home-container {
-  width: 100%;
-  height: 385px;
-  background: url('#{$url}c9ca54486d6e7db525acc7c571c8032.jpg') no-repeat center 100% / 100%;
+.user {
+  background-color: #fbfbfb;
+
+  .user-container {
+    position: relative;
+    .user-container-header {
+      width: 100%;
+      height: 160px;
+      background: url('../../../src/assets/images/user-bg.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100%;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    .head-img {
+      z-index: 999;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 80px auto 0;
+    }
+
+    .user-container-info {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: 110px auto 0;
+      width: 92%;
+      height: 140px;
+      background-color: rgb(243, 243, 243);
+      z-index: 99;
+      border-radius: 5px;
+    }
+    .user-container-cell {
+      margin-top: 110px;
+    }
+  }
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <van-row class="login-header">
-      <van-col span="3">
-        <!-- <van-icon class="icon-left" name="arrow-left" /> -->
+      <van-col span="3" @click="back">
+        <van-icon class="icon-left" name="arrow-left" />
       </van-col>
       <van-col class="line-center" span="18">{{ titlList[tabbarCurrent] }}</van-col>
       <van-col class="icon-right" span="3" @click="tapTab"
@@ -11,9 +11,11 @@
       >
     </van-row>
 
+    <div class="login-container-title"></div>
+
     <!-- 登陆内容 -->
     <div class="login-container" v-if="tabbarCurrent === 0">
-      <van-form @submit="onSubmit" class="login-content">
+      <van-form class="login-content">
         <van-field
           v-model="value1"
           name="用户名"
@@ -106,6 +108,7 @@ import { Toast } from 'vant'
 import { throttle } from '@/utils/index'
 import { useRouter } from 'vue-router'
 import { storage } from '@/utils/storage'
+import store from '@/store'
 import { checkUsername, sendMail, register, loginU, loginByMail } from '@/api/authController'
 export default defineComponent({
   name: 'login',
@@ -138,6 +141,10 @@ export default defineComponent({
         } else if (state.tabbarCurrent === 1) {
           state.tabbarCurrent = 0
         }
+      },
+
+      back() {
+        state.router.push('/home')
       },
 
       // 校验函数返回 true 表示校验通过，false 表示不通过
@@ -195,13 +202,18 @@ export default defineComponent({
       },
 
       // 注册成功 登陆成功 跳到主页 存储用户信息
-      goIndex(data: string, username: string) {
+      goIndex(data: string, username: string, res: any) {
         state.router.push('/home')
         const userInfo = {
           username: username,
           token: data
         }
         storage.set('userInfo', userInfo)
+        store.commit('user/SET_INIT_TOKEN', res)
+        store.commit('user/SET_INIT_USER', res)
+
+        // console.log(store.getters.token)
+        // console.log(store.getters.user)
       }
     })
 
@@ -223,7 +235,7 @@ export default defineComponent({
           result.then((res) => {
             if (res.msg === '登录成功' && res.code === 200) {
               //登陆成功 存token
-              methods.goIndex(res.satoken, query.mail)
+              methods.goIndex(res.satoken, query.mail, res)
             }
           })
         } else {
@@ -232,13 +244,13 @@ export default defineComponent({
             password: state.value2
           }
           const result = loginU(data)
-          console.log(result);
-          
+          console.log(result)
+
           result
             .then((res) => {
               if (res.msg === '登录成功' && res.code === 200) {
                 //登陆成功 存token
-                methods.goIndex(res.satoken, data.username)
+                methods.goIndex(res.satoken, data.username, res)
               }
             })
             .catch((rej) => {
@@ -284,7 +296,7 @@ export default defineComponent({
                 .then((res) => {
                   if (res.msg === '登录成功' && res.code === 200) {
                     //登陆成功 存token
-                    methods.goIndex(res.satoken, data.username)
+                    methods.goIndex(res.satoken, data.username, res)
                   }
                 })
                 .catch((rej) => {
@@ -338,6 +350,15 @@ export default defineComponent({
       margin-top: 8px;
       font-size: 14px;
     }
+  }
+
+  .login-container-title {
+    width: 100%;
+    height: 130px;
+    background: url('../../../src/assets/images/logo.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
   }
 
   .signin-container {
