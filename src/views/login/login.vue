@@ -355,7 +355,7 @@ export default defineComponent({
   .login-container-title {
     width: 100%;
     height: 130px;
-    background: url('../../../src/assets/images/logo.jpg');
+    background: url('#{$url}logo.jpg');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 100%;
