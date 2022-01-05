@@ -208,7 +208,7 @@ export default defineComponent({
           username: username,
           token: data
         }
-        storage.set('userInfo', userInfo)
+        storage.set('token', userInfo.token)
         store.commit('user/SET_INIT_TOKEN', res)
         store.commit('user/SET_INIT_USER', res)
 

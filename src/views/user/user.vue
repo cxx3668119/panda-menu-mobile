@@ -30,7 +30,7 @@
       </div>
 
       <van-cell-group class="user-container-cell" inset>
-        <van-cell title="个人主页" is-link icon="manager-o" />
+        <van-cell title="个人信息" is-link icon="manager-o" />
         <van-cell title="我的积分" is-link icon="point-gift-o" />
         <van-cell title="我的徽章" is-link icon="medal-o" />
         <van-cell title="客户中心" is-link icon="phone-circle-o" />

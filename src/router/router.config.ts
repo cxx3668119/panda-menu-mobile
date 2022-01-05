@@ -8,7 +8,8 @@ export const constantRouterMap: Array<RouteRecordRaw> = [
     redirect: '/home',
     meta: {
       title: '首页',
-      keepAlive: false
+      keepAlive: false,
+      requiresAuth: true 
     }
     // children: [
     // 	{
@@ -33,6 +34,10 @@ export const constantRouterMap: Array<RouteRecordRaw> = [
   {
     path: '/user',
     name: 'User',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/user/user.vue')
+    component: () => import(/* webpackChunkName: "about" */ '@/views/user/user.vue'),
+    meta:{
+      title: '个人主页',
+      requiresAuth: true 
+    }
   }
 ]

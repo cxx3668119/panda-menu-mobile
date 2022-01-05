@@ -47,6 +47,25 @@ const router = createRouter({
 //   next()
 // })
 
+router.beforeEach((to, from, next) => {
+  const token = window.localStorage.getItem('token')
+  if (to.meta.requiresAuth) {
+    if (token) {
+      store.dispatch('getUser')
+      next()
+    } else {
+      store.dispatch('logOut')
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+
 router.afterEach((to, from, next) => {
   let url
   if (phoneModel() === 'ios') {
